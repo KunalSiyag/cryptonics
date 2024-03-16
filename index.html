@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptonics</title>
+    <link rel="stylesheet" href="./commonStyle.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/aa7454d09f.js" crossorigin="anonymous"></script>
+    <style>
+        button{
+            border-radius: 40px;
+            padding: 20px;
+            background-color: orange;
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            border-width: 0px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <a href="./index.html">
+            <img src="./img/logo-white.png" alt="">
+            <h1>Cryptonics</h1>
+            </a>
+        </div>
+        <ul class="nav" id="nav">
+            <ul class="navLogo">
+                <a href="./index.html">
+                     <img src="./img/logo-white.png" alt="">
+               </a>
+            </ul>
+            <li class="nav-link"><a href="./index.html">Home</a></li>
+            <li class="nav-link"><a href="./aboutus.html">About Us</a></li>
+            <li class="nav-link"><a href="./contact.html">Contact</a></li>
+            <li><button id="connectButton">Login</button></li>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    if (window.ethereum) {
+                        const connectButton = document.getElementById('connectButton');
+        
+                        connectButton.addEventListener('click', function () {
+                            ethereum.request({ method: 'eth_requestAccounts' })
+                                .then(accounts => {
+                                    window.location.href = 'deploy_contract.html';
+                                })
+                                .catch(error => {
+                                    console.error('Error connecting to MetaMask:', error);
+                                });
+                        });
+                    } else {
+                        alert('MetaMask is not installed. Please install MetaMask to connect.');
+                    }
+                });
+            </script>
+        </ul>
+        <div id="barContainer">
+            <i id="bar" class="fa-solid fa-bars"></i>
+        </div>
+    </header>
+
+    <section class="hero gridSection">
+        <div class="sectionDesc">
+            <h1 class="headline">
+                Welcome To <span class="cryptoText">CRYPTONICS</span>.
+            </h1>
+            <p class="sub-headline">
+                Explore, discover, and engage with our platform.
+                Let's embark on a journey together towards excellence and fulfillment.
+                Enjoy your stay!
+            </p>
+        </div>
+        <div class="sectionPic bouncepic" id="sectionPic">
+            <img src="./img/hero-image.png" alt="">
+        </div>
+    </section>
+
+    <section>
+        <div class="carouselContainer">
+            <div class="eachCarousel eachCarouselBorder">
+                <img src="./img/solana-image.png" alt="" width="50px" length="50px">
+                <article class="carouselDesc">
+                    <h1 class="carouselTitle">Solana</h1>
+                    <p class="carouselPara">Bitcoin is an innovative payment network</p>
+                    <div class="carouselPrice">
+                        <h3 id="solana-price"></h3>
+                        <script>
+                            async function fetchSolanaData() {
+                                const url = 'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd';
+                    
+                                try {
+                                    const response = await fetch(url);
+                                    const data = await response.json();
+                                    document.getElementById('solana-price').textContent = `USD ${data.solana.usd}`;
+                                } catch (error) {
+                                    console.error('Error fetching Solana data:', error);
+                                    document.getElementById('solana-price').textContent = 'Failed to load data.';
+                                }
+                            }         
+                            fetchSolanaData();
+                        </script>
+                    </div>
+                </article>
+            </div>
+            <div class="eachCarousel">
+                <img src="./img/matic-icon.jpeg" alt="" width="50px" length="50px">
+                <article class="carouselDesc">
+                    <h1 class="carouselTitle">Polygon</h1>
+                    <p class="carouselPara">Ethereum is open-source blockchain currency</p>
+                    <div class="carouselPrice">
+                        <h3 id="matic-price"></h3>
+                        <script>
+                            async function fetchMaticData() {
+                                const url = 'https://api.coingecko.com/api/v3/simple/price?ids=polygon&vs_currencies=usd';
+                    
+                                try {
+                                    const response = await fetch(url);
+                                    const data = await response.json();
+                                    document.getElementById('matic-price').textContent = `USD ${data.polygon.usd}`;
+                                } catch (error) {
+                                    console.error('Error fetching Polygon (MATIC) data:', error);
+                                    document.getElementById('matic-price').textContent = 'Failed to load data.';
+                                }
+                            }                        
+                            fetchMaticData();
+                        </script>
+                    </div>
+                </article>
+            </div>
+            <div class="eachCarousel">
+                <img src="./img/doge coin-icon.png" alt="" width="50px" length="50px">
+                <article class="carouselDesc">
+                    <h1 class="carouselTitle">Doge Coin</h1>
+                    <p class="carouselPara">Tether is a stable coin cryptocurrency</p>
+                    <div class="carouselPrice">
+                        <h3 id="dogecoin-price"></h3>
+                        <script>
+                            async function fetchDogecoinData() {
+                                const url = 'https://api.coingecko.com/api/v3/simple/price?ids=dogecoin&vs_currencies=usd';
+                                try {
+                                    const response = await fetch(url);
+                                    const data = await response.json();
+                                    document.getElementById('dogecoin-price').textContent = `USD ${data.dogecoin.usd}`;
+                                } catch (error) {
+                                    console.error('Error fetching Dogecoin data:', error);
+                                    document.getElementById('dogecoin-price').textContent = 'Failed to load data.';
+                                }
+                            }
+                            fetchDogecoinData();
+                        </script>
+                    </div>
+                </article>
+            </div>
+            <div class="eachCarousel">
+                <img src="./img/bitcoin-icon.png" alt="">
+                <article class="carouselDesc">
+                    <h1 class="carouselTitle">Bitcoin</h1>
+                    <p class="carouselPara">Bitcoin is an innovative payment network</p>
+                    <div class="carouselPrice">
+                        <h3 id="bitcoin-price"></h3>
+                        <script>
+                            async function fetchBitcoinData() {
+                            const url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd';
+                            try {
+                                const response = await fetch(url);
+                                const data = await response.json();
+                                document.getElementById('bitcoin-price').textContent = `USD ${data.bitcoin.usd}`;
+                            } catch (error) {
+                                console.error('Error fetching Bitcoin data:', error);
+                                document.getElementById('bitcoin-price').textContent = 'Failed to load data.';
+                            }
+                        }
+                        fetchBitcoinData();
+                        </script>                        
+                    </div>
+                </article>
+            </div>
+            <div class="eachCarousel">
+                <img src="./img/ethereum-icon.png" alt="">
+                <article class="carouselDesc">
+                    <h1 class="carouselTitle">Ethereum</h1>
+                    <p class="carouselPara">Ethereum is open-source blockchain currency</p>
+                    <div class="carouselPrice">
+                        <h3 id="ethereum-price"></h3>
+                        <script>
+                            async function fetchEthereumData() {
+                                const url = 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd';
+                    
+                                try {
+                                    const response = await fetch(url);
+                                    const data = await response.json();
+
+                                    document.getElementById('ethereum-price').textContent = `USD ${data.ethereum.usd}`;
+                                } catch (error) {
+                                    console.error('Error fetching Ethereum data:', error);
+                                    document.getElementById('ethereum-price').textContent = 'Failed to load data.';
+                                }
+                            }
+                            fetchEthereumData();
+                        </script>
+                    </div>
+                </article>
+            </div>
+            <div class="eachCarousel">
+                <img src="./img/tether-icon.png" alt="">
+                <article class="carouselDesc">
+                    <h1 class="carouselTitle">Tether</h1>
+                    <p class="carouselPara">Tether is a stable coin cryptocurrency</p>
+                    <div class="carouselPrice">
+                        <h3 id="tether-price"></h3>
+                        <script>
+                            async function fetchTetherData() {
+                                const url = 'https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd';
+                    
+                                try {
+                                    const response = await fetch(url);
+                                    const data = await response.json();
+                                    document.getElementById('tether-price').textContent = `USD ${data.tether.usd}`;
+                                } catch (error) {
+                                    console.error('Error fetching Tether data:', error);
+                                    document.getElementById('tether-price').textContent = 'Failed to load data.';
+                                }
+                            }                    
+                            fetchTetherData();
+                        </script>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="carouselIndicator">
+            <div class="indicator activeIndicator" onclick="slideCarousel(0)"></div>
+            <div class="indicator" onclick="slideCarousel(1)"></div>
+            <div class="indicator" onclick="slideCarousel(2)"></div>
+            <div class="indicator" onclick="slideCarousel(3)"></div>
+            <div class="indicator" onclick="slideCarousel(4)"></div>
+            <div class="indicator" onclick="slideCarousel(5)"></div>
+        </div>
+    </section>
+    <section class="gridSection">
+        <div class="sectionDesc processessDesc">
+            <h1 class="sectionHeader">Chain Process</h1>
+            <p class="sectionPara">We do not charge any fees and we do not require 
+              any registration. You keep your privacy and your 
+              coins.
+            </p>
+            <div class="eachProcesses">
+                <img src="./img/handshake-icon-white-line.svg" alt="handshake">
+                <div class="eachprocessesPara">
+                    <h1 class="processTitle">Lending</h1>
+                    <p>
+                        The act of speculating on cryptocurrency price movements 
+                        via a CFD trading account, or buying and selling.
+                    </p>
+                </div>
+            </div>
+            <div class="eachProcesses">
+                <img src="./img/cart-icon-white-line.svg" alt="handshake">
+                <div class="eachprocessesPara">
+                    <h1 class="processTitle">Borrowing</h1>
+                    <p>
+                        Best cryptocurrency exchanges currently purchase Bitcoin, 
+                        Ethereum, and Litecoin other coins and tokens on the platform.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="sectionPic bouncepic processesPic" id="sectionPic">
+            <img src="./img/chain-process-img.png" alt="">
+        </div>
+    </section>
+    <section class="gridSection">
+        <div class="sectionDesc marketDesc">
+            <h1 class="sectionHeader">Markets at finger</h1>
+            <p class="sectionPara">The Blockchain is a decentralized, 
+                digital ledger of transactions that are recorded 
+                confirmed
+            </p>
+            <div class="eachMarket">
+                <img src="./img/buy-icon-color.svg" alt="handshake">
+                <div>
+                    <h1 class="marketTitle">Lending</h1>
+                    <p class="darkPara">
+                        Best cryptocurrency exchanges currently purchase 
+                        Bitcoin, Ethereum, and Litecoin other coins and tokens 
+                        on the platform.
+                    </p>
+                </div>
+            </div>
+            <div class="eachMarket">
+                <img src="./img/trading-icon-color.svg" alt="handshake">
+                <div>
+                    <h1 class="marketTitle">Borrowing</h1>
+                    <p class="darkPara">
+                        The act of speculating on cryptocurrency price movements 
+                        via a CFD trading account, or buying and selling.
+                    </p>
+                </div>
+            </div>
+            <div class="eachMarket">
+                <img src="./img/support-icon-color.svg" alt="handshake">
+                <div>
+                    <h1 class="marketTitle">NFT Staking</h1>
+                    <p class="darkPara">
+                        Don’t worry if you’re new to crypto and digital 
+                        currencies – Skrill makes setting up a cryptocurrency 
+                        wallet easy.
+                    </p>
+                </div>
+            </div> 
+        </div>
+        <div class="sectionPic marketspicSection" id="sectionPic">
+           <h1 class="marketspicHeader">CRYPTOCURRENCY</h1>
+            <div class="marketsPicContainer">
+                <div class="marketPic marketPic1">
+                    <img src="./img/persent-icon-white.svg" alt="">
+                    <article class="marketTitle">Hot Sale</article>
+                </div>
+    
+                <div class="marketPic marketPic2">
+                    <img src="./img/bitcoin-icon-white.svg" alt="">
+                    <article class="marketTitle">Bit coin</article>
+                </div>
+    
+                <div class="marketPic marketPic3">
+                    <img src="./img/ethereum-white-icon.svg" alt="">
+                    <article class="marketTitle">ETHEREUM</article>
+                </div>
+    
+                <div class="marketPic marketPic4">
+                    <img src="./img/handshake-icon-white.svg" alt="">
+                    <article class="marketTitle">CONNECTING</article>
+                </div>
+            </div>
+            </div>
+    </section>
+    <div class="fundSection">
+        <div class="sectionDesc">
+            <h1 class="sectionHeader">Control your funds</h1>
+            <p class="sectionPara">
+                Our mining pool offers some of the most competitive contracts in the market.
+            </p>
+            <div class="fundsContainer">
+                <div class="fund">
+                    <img src="./img/cryptocurrency-white-icon.svg" alt="cryptocurrency">
+                    <h1 class="fundType">Support All Currency</h1>
+                    <p class="darkPara">
+                        Accept and process payments from all types of currencies.
+                    </p>
+                </div>
+
+                <div class="fund">
+                    <img src="./img/blockchain-white-icon.svg" alt="cryptocurrency">
+                    <h1 class="fundType">Block Chain System</h1>
+                    <p class="darkPara">
+                        How it Works, Benefits and its Deployment in Financial
+                    </p>
+                </div>
+
+                <div class="fund">
+                    <img src="./img/cryptocurrency-sell-white-icon.svg" alt="cryptocurrency">
+                    <h1 class="fundType">Fund Selling</h1>
+                    <p class="darkPara">
+                        How to Profit in the Crypto Markets through Investing
+                    </p>
+                </div>
+
+                <div class="fund">
+                    <img src="./img/cryptocurrency-card-white-icon.svg" alt="cryptocurrency">
+                    <h1 class="fundType">Crypto Card</h1>
+                    <p class="darkPara">
+                        Crypto Cards and Why Cryptocurrency are the Future
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footerlinksContainer">
+            <div class="footerAboutus">
+                <img src="./img/logo-white.png" alt="">
+                <h1>Cryptonics</h1>
+                <p class="darkPara" style="color: white;">We empowers users to pool their funds together and automatically invest them in leading lending platforms, such as Aave and Compound, to generate lucrative interest yields.</p>
+                <div class="footersociallinkContainer">
+                    <img class="sociallink" src="./img/fabook-icon-white.svg" alt="">
+                    <img class="sociallink" src="./img/twitter-icon-white.svg" alt="">
+                    <img class="sociallink" src="./img/inkedin-icon-white.svg" alt="">
+                    <img class="sociallink" src="./img/whatsapp-icon-white.svg" alt="">
+                </div>
+            </div>
+            <div class="footerlink">
+
+            </div>
+            <div class="footerlink">
+                <h1 class="linkTitle">Explore</h1>
+                <a href="#" class="eachLink">About us</a>
+                <a href="#" class="eachLink">FAQ</a>
+                <a href="#" class="eachLink">Contact</a>
+            </div>
+
+            <div class="footerlink">
+                <h1 class="linkTitle">Service</h1>
+                <a href="#" class="eachLink">Mint CPT</a>
+                <a href="#" class="eachLink">User Data</a>
+                <a href="#" class="eachLink">Design</a>
+                <a href="#" class="eachLink">Security</a>
+            </div>
+        </div>
+    </footer>
+    
+
+    <script src="./script.js"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptonics</title>
+    <link rel="stylesheet" href="./commonStyle.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/aa7454d09f.js" crossorigin="anonymous"></script>
+    <style>
+        button{
+            border-radius: 40px;
+            padding: 10px;
+            background-color: burlywood;
+            color: black;
+            font-size: 1rem;
+            width: 45%;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            border-width: 0px;
+        }
+        input{
+            border-radius: 40px;
+            padding: 10px;
+            background-color: wheat;
+            color: black;
+            font-size: 1rem;
+            width: 45%;
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            border-width: 0px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="logo">
+            <a href="./index.html">
+                <img src="./img/logo-white.png" alt="">
+                <h1>Cryptonics</h1>
+            </a>
+        </div>
+        <ul class="nav" id="nav">
+            <ul class="navLogo">
+                <a href="./index.html">
+                    <img src="./img/logo-white.png" alt="">
+                </a>
+            </ul>
+            <li class="nav-link"><a href="./index.html">Home</a></li>
+            <li class="nav-link"><a href="./aboutus.html">About Us</a></li>
+            <li class="nav-link"><a href="./contact.html">Contact</a></li>
+        </ul>
+        <div id="barContainer">
+            <i id="bar" class="fa-solid fa-bars"></i>
+        </div>
+    </header>
+    <section class="hero gridSection">
+        <div class="sectionDesc">
+            <h1 class="headline">
+                Welcome <span class="cryptoText" id="name">Aaryan</span>.
+            </h1>
+            <p class="sub-headline">
+                You can see a record of all your transactions 
+                anytime you want and never have to worry about 
+                someone erasing or stealing your money!
+            </p>
+        </div>
+        <div class="sectionPic bouncepic" id="sectionPic">
+            <img src="./img/newsletter.png" alt="">
+        </div>
+    </section>
+    <section>
+        <div class="carouselContainer">
+            <div class="eachCarousel" style="background-color: #080825; display: block;">
+                <div>
+                    <h1>
+                        Net Balance : <span id="1">ETH 10000</span>
+                    </h1>
+                </div>
+                <br>
+                <div>
+                    <h1>
+                        Total Collateral : <span id="2">ETH 10000</span>
+                    </h1>
+                </div>
+                <br>
+                <div>
+                    <h1>
+                        Total Deposit : <span id="3">ETH 10000</span>
+                    </h1>
+                </div>
+                <br>
+                <div>
+                    <h1>
+                        Total Borrowed : <span id="4">ETH 10000</span>
+                    </h1>
+                </div>
+                <br>
+                <div>
+                    <h1>
+                        Total Supply : <span id="5">ETH 10000</span>
+                    </h1>
+                </div>
+            </div>
+            <div class="eachCarousel">
+                <img src="./img/ethereum-icon.png" alt="">
+                <article class="carouselDesc">
+                    <h1 class="carouselTitle">Ethereum</h1>
+                    <p class="carouselPara">Ethereum is open-source blockchain currency</p>
+                    <div class="carouselPrice">
+                        <h3 id="ethereum-price"></h3>
+                        <script>
+                            async function fetchEthereumData() {
+                                const url = 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd';
+                
+                                try {
+                                    const response = await fetch(url);
+                                    const data = await response.json();
+
+                                    document.getElementById('ethereum-price').textContent = `USD ${data.ethereum.usd}`;
+                                } catch (error) {
+                                    console.error('Error fetching Ethereum data:', error);
+                                    document.getElementById('ethereum-price').textContent = 'Failed to load data.';
+                                }
+                            }
+                            fetchEthereumData();
+                        </script>
+                    </div>
+                </article>
+            </div>
+            <div class="eachCarousel" style="display: block;">
+                <div></div><input type="number" id="num1"><button id="connectButton">addcollateral</button>
+                <div><input type="number" id="num2"><button id="connectButton">remcollateral</button></div>
+                <div><input type="number" id="num3"><button id="connectButton">bondasset</button></div>
+                <div><input type="number" id="num4"><button id="connectButton">unbondasset</button></div>
+                <div><input type="number" id="num5"><button id="connectButton">repay</button></div>
+                <div><input type="number" id="num6"><button id="connectButton">borrow</button></div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="footerlinksContainer">
+            <div class="footerAboutus">
+                <img src="./img/logo-white.png" alt="">
+                <h1>Cryptonics</h1>
+                <p class="darkPara" style="color: white;">We empowers users to pool their funds together and automatically invest them in leading lending platforms, such as Aave and Compound, to generate lucrative interest yields.</p>
+                <div class="footersociallinkContainer">
+                    <img class="sociallink" src="./img/fabook-icon-white.svg" alt="">
+                    <img class="sociallink" src="./img/twitter-icon-white.svg" alt="">
+                    <img class="sociallink" src="./img/inkedin-icon-white.svg" alt="">
+                    <img class="sociallink" src="./img/whatsapp-icon-white.svg" alt="">
+                </div>
+            </div>
+            <div class="footerlink">
+
+            </div>
+            <div class="footerlink">
+                <h1 class="linkTitle">Explore</h1>
+                <a href="#" class="eachLink">About us</a>
+                <a href="#" class="eachLink">FAQ</a>
+                <a href="#" class="eachLink">Contact</a>
+            </div>
+            <div class="footerlink">
+                <h1 class="linkTitle">Service</h1>
+                <a href="#" class="eachLink">Mint CPT</a>
+                <a href="#" class="eachLink">User Data</a>
+                <a href="#" class="eachLink">Design</a>
+                <a href="#" class="eachLink">Security</a>
+            </div>
+        </div>
+    </footer>
+    <script src="./script.js"></script>
+</body>
+</html>
