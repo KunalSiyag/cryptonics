@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./commonStyle.css">
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/aa7454d09f.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.3/web3.min.js"></script>
     <style>
         button{
             border-radius: 40px;
@@ -55,6 +56,7 @@
             <li class="nav-link"><a href="./index.html">Home</a></li>
             <li class="nav-link"><a href="./aboutus.html">About Us</a></li>
             <li class="nav-link"><a href="./contact.html">Contact</a></li>
+            <li><button id="connectButton">Login</button></li>
         </ul>
         <div id="barContainer">
             <i id="bar" class="fa-solid fa-bars"></i>
@@ -63,7 +65,7 @@
     <section class="hero gridSection">
         <div class="sectionDesc">
             <h1 class="headline">
-                Welcome <span class="cryptoText" id="name">Aaryan</span>.
+                Welcome! <br><span class="cryptoText" id="name"></span>.
             </h1>
             <p class="sub-headline">
                 You can see a record of all your transactions 
@@ -80,31 +82,31 @@
             <div class="eachCarousel" style="background-color: #080825; display: block;">
                 <div>
                     <h1>
-                        Net Balance : <span id="1">ETH 10000</span>
+                        Net Balance :  <span id="totalBalance"></span>ETH
                     </h1>
                 </div>
                 <br>
                 <div>
                     <h1>
-                        Total Collateral : <span id="2">ETH 10000</span>
+                        Total Collateral : <span id="totalCollateral"></span>ETH 
                     </h1>
                 </div>
                 <br>
                 <div>
                     <h1>
-                        Total Deposit : <span id="3">ETH 10000</span>
+                        Total Deposit : <span id="totalDeposit"></span>ETH 
                     </h1>
                 </div>
                 <br>
                 <div>
                     <h1>
-                        Total Borrowed : <span id="4">ETH 10000</span>
+                        Total Borrowed :  <span id="totalBorrowed"></span>ETH
                     </h1>
                 </div>
                 <br>
                 <div>
                     <h1>
-                        Total Supply : <span id="5">ETH 10000</span>
+                        Total CPT Balance :  <span id="totalCPTBalance"></span>CPT
                     </h1>
                 </div>
             </div>
@@ -135,12 +137,12 @@
                 </article>
             </div>
             <div class="eachCarousel" style="display: block;">
-                <div></div><input type="number" id="num1"><button id="connectButton">addcollateral</button>
-                <div><input type="number" id="num2"><button id="connectButton">remcollateral</button></div>
-                <div><input type="number" id="num3"><button id="connectButton">bondasset</button></div>
-                <div><input type="number" id="num4"><button id="connectButton">unbondasset</button></div>
-                <div><input type="number" id="num5"><button id="connectButton">repay</button></div>
-                <div><input type="number" id="num6"><button id="connectButton">borrow</button></div>
+                <div></div><input type="number" id="num1"><button onclick="addCollateral()">addcollateral</button>
+                <div><input type="number" id="num2"><button onclick="remCollateral()">remcollateral</button></div>
+                <div><input type="number" id="num3"><button onclick="bondasset()">bondasset</button></div>
+                <div><input type="number" id="num4"><button onclick="unbondasset()">unbondasset</button></div>
+                <div><input type="number" id="num5"><button onclick="repay()">repay</button></div>
+                <div><input type="number" id="num6"><button onclick="borrow()">borrow</button></div>
             </div>
         </div>
     </section>
@@ -175,6 +177,926 @@
             </div>
         </div>
     </footer>
-    <script src="./script.js"></script>
+    <script type="text/javascript">
+        const contractAddress = '0xb632ac832B7b0b9093A63A42EFBa4Fafe30AdE54';
+        const contractABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "addCollateral",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "bondAsset",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "borrow",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "burn",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "burnFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claimRewards",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "initialOwner",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "allowance",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "needed",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC20InsufficientAllowance",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "balance",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "needed",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC20InsufficientBalance",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "approver",
+				"type": "address"
+			}
+		],
+		"name": "ERC20InvalidApprover",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			}
+		],
+		"name": "ERC20InvalidReceiver",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "ERC20InvalidSender",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "ERC20InvalidSpender",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "OwnableInvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "OwnableUnauthorizedAccount",
+		"type": "error"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "liquidation",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "removeCollateral",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "repay",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "unbondAsset",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	},
+	{
+		"inputs": [],
+		"name": "_borrowLimit",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "baseRate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "calculateBorrowFee",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "calculateRewards",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ethTreasury",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "fixedAnnuBorrowRate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCash",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "getCPTBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getExchangeRate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getLastRewardTime",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "maxLTV",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "rewardRatePerMinute",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalBorrowed",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalCollateral",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalDeposit",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalReserve",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+var contract = null;
+var account = null;
+
+(async () => {
+    try {
+        if (window.ethereum) {
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            window.web3 = new Web3(window.ethereum);
+            var accounts = await web3.eth.getAccounts();
+            account = accounts[0];
+            document.getElementById('name').textContent = account;
+            const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+            contract = contractInstance;
+            updateContractInfo(contractInstance);
+        } else {
+            console.error('MetaMask is not installed or not connected.');
+        }
+    } catch (error) {
+        console.error('Error during initialization:', error);
+    }
+})();
+
+const deploy = async(abi,bytecode)=>{
+    var deployingContract = new web3.eth.Contract(abi).deploy({
+        data:bytecode,
+        arguments: []
+    });
+    var estimatedGas = await deployingContract.estimatedGas();
+    var deployedContract = await deployingContract.send({
+        from: account,
+        gas: estimatedGas
+    })
+    return deployedContract.options.address;
+}
+
+
+async function addCollateral() {
+    const collateralAmount = document.getElementById('num1').value;
+    if (!collateralAmount) {
+        console.error('Collateral amount is required.');
+        return;
+    }
+    try {
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const web3 = new Web3(window.ethereum);
+        const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+        await contractInstance.methods.addCollateral(collateralAmount).send({ from: accounts[0] });
+        updateContractInfo(contractInstance);
+    } catch (error) {
+        console.error('Error adding collateral:', error);
+    }
+}
+
+async function remCollateral() {
+    const collateralAmount = document.getElementById('num2').value;
+    try {
+        if (window.ethereum) {
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            const web3 = new Web3(window.ethereum);
+            const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+            await contractInstance.methods.remCollateral(collateralAmount).send({ from: accounts[0] });
+            updateContractInfo(contractInstance);
+        } else {
+            console.error('MetaMask is not installed or not connected.');
+        }
+    } catch (error) {
+        console.error('Error removing collateral:', error);
+    }
+}
+
+async function bondasset() {
+    const assetAmount = document.getElementById('num3').value;
+    try {
+        if (window.ethereum) {
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            const web3 = new Web3(window.ethereum);
+            const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+            await contractInstance.methods.bondasset(assetAmount).send({ from: accounts[0] });
+            updateContractInfo(contractInstance);
+        } else {
+            console.error('MetaMask is not installed or not connected.');
+        }
+    } catch (error) {
+        console.error('Error bonding asset:', error);
+    }
+}
+
+async function unbondasset() {
+    const assetAmount = document.getElementById('num4').value;
+    try {
+        if (window.ethereum) {
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            const web3 = new Web3(window.ethereum);
+            const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+            await contractInstance.methods.unbondasset(assetAmount).send({ from: accounts[0] });
+            updateContractInfo(contractInstance);
+        } else {
+            console.error('MetaMask is not installed or not connected.');
+        }
+    } catch (error) {
+        console.error('Error unbonding asset:', error);
+    }
+}
+
+async function repay() {
+    const repayAmount = document.getElementById('num5').value;
+    try {
+        if (window.ethereum) {
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            const web3 = new Web3(window.ethereum);
+            const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+            await contractInstance.methods.repay(repayAmount).send({ from: accounts[0] });
+            updateContractInfo(contractInstance);
+        } else {
+            console.error('MetaMask is not installed or not connected.');
+        }
+    } catch (error) {
+        console.error('Error repaying:', error);
+    }
+}
+
+async function updateContractInfo(contractInstance) {
+    try {
+        const totalBalance = await contractInstance.methods.balanceOf(account).call();
+        const totalCollateral = await contractInstance.methods.totalCollateral().call();
+        const totalDeposit = await contractInstance.methods.totalDeposit().call();
+        const totalBorrowed = await contractInstance.methods.totalBorrowed().call();
+        const totalCPTBalance = await contractInstance.methods.getCPTBalance(account).call();
+
+        document.getElementById('totalBalance').textContent = totalBalance;
+        document.getElementById('totalCollateral').textContent = totalCollateral;
+        document.getElementById('totalDeposit').textContent = totalDeposit;
+        document.getElementById('totalBorrowed').textContent = totalBorrowed;
+        document.getElementById('totalCPTBalance').textContent = totalCPTBalance;
+    } catch (error) {
+        console.error('Error fetching contract information:', error);
+    }
+}
+
+window.addEventListener('load', function () {
+    if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+
+        updateContractInfo(contractInstance);
+    } else {
+        console.error('MetaMask is not installed or not connected.');
+    }
+});
+    </script>
 </body>
 </html>

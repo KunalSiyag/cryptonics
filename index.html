@@ -41,26 +41,7 @@
             <li class="nav-link"><a href="./index.html">Home</a></li>
             <li class="nav-link"><a href="./aboutus.html">About Us</a></li>
             <li class="nav-link"><a href="./contact.html">Contact</a></li>
-            <li><button id="connectButton">Login</button></li>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    if (window.ethereum) {
-                        const connectButton = document.getElementById('connectButton');
-        
-                        connectButton.addEventListener('click', function () {
-                            ethereum.request({ method: 'eth_requestAccounts' })
-                                .then(accounts => {
-                                    window.location.href = 'deploy_contract.html';
-                                })
-                                .catch(error => {
-                                    console.error('Error connecting to MetaMask:', error);
-                                });
-                        });
-                    } else {
-                        alert('MetaMask is not installed. Please install MetaMask to connect.');
-                    }
-                });
-            </script>
+            <li class="nav-link"><a href="./deploy_contract.html">App</a></li>
         </ul>
         <div id="barContainer">
             <i id="bar" class="fa-solid fa-bars"></i>
