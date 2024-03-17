@@ -163,6 +163,7 @@ header{
     gap: 10px;
     grid-auto-flow: column;
     grid-auto-columns: 100%;
+    overflow: hidden;
     border-radius: 20px;
     scroll-behavior: smooth;
 }
